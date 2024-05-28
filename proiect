@@ -1,0 +1,724 @@
+#include <iostream>
+#include "meniu.h"
+
+int main()
+{
+    meniu();
+    return 0;
+}
+
+
+#ifndef MENIU_H
+#define MENIU_H
+#include "pescar.h"
+#include "vectorpescari.h"
+#include "modifica.h"
+#include "modifica2.h"
+
+void MeniuPrincipal()
+{
+    cout << "Meniu principal:\n";
+    cout <<  "1- Adauga pescar   " << "2- Adauga echipament pescar  " << "3- Afisare informatii  "<< "  4- Modificare date  " << "  5- Iesire\n";
+    cout << "Alegeti o optiune: ";
+}
+void MeniuAfisare()
+{
+    cout << "\n";
+    cout << "1- Lista pescarilor   "<< "  2- Informatii despre un anumit pescar   " << "  3- Inapoi la meniul principal\n";
+    cout << "Alegeti o optiune: ";
+}
+void MeniuModificare()
+{
+    cout << "\n";
+    cout << "1- Modifica date pescar   "<< "  2- Modifica echipament pescar   " << "  3- Inapoi la meniul principal\n";
+    cout << "Alegeti o optiune: ";
+}
+void meniu()
+{
+    Vectorp pescari;
+    int choice;
+    while(true)
+    {
+        MeniuPrincipal();
+        cin>>choice;
+
+        switch (choice)
+        {
+case 1:
+{
+        int id;
+        string nume, prenume;
+        int varsta;
+        cout << "\nIntroduceti ID-ul pescarului: ";
+        while (true)
+        {
+            cin >> id;
+            if (pescari.idOcupat(id))
+            {
+            cout << "ID-ul introdus este deja ocupat. Va rugam sa introduceti un alt ID: ";
+            } else
+            {
+            break;
+            }
+        }
+        cout << "Introduceti numele pescarului: ";
+        cin >> nume;
+        cout << "Introduceti prenumele pescarului: ";
+        cin >> prenume;
+        cout << "Introduceti varsta pescarului: ";
+        cin >> varsta;
+        cout << endl;
+        Pescar pescarNou(id, nume, prenume, varsta);
+        pescari.adaugaPescar(pescarNou);
+}
+break;
+//
+case 2:
+{
+    int idPescar;
+    do {
+        cout << "\nIntroduceti ID-ul pescarului pentru adaugarea echipamentului: ";
+        cin >> idPescar;
+        if (!pescari.existaPescar(idPescar))
+        {
+            cout << "Nu exista un pescar cu acest ID. Va rugam sa introduceti un alt ID.\n";
+        }
+    } while (!pescari.existaPescar(idPescar));
+
+    int tipEchipament;
+    cout << "\nSelectati tipul echipamentului:\n";
+    cout << "1. Undita   " << "2. Mulineta   "<< "3. Accesorii\n";
+    cout << "Alegeti o optiune: ";
+    cin >> tipEchipament;
+
+    switch (tipEchipament)
+    {
+        case 1:
+        {
+            float lungime;
+            int putere;
+            cout << "Introduceti lungimea unditei: ";
+            cin >> lungime;
+            cout << "Introduceti puterea unditei: ";
+            cin >> putere;
+            cout << endl;
+            Undita* undita = new Undita(idPescar, lungime, putere);
+            pescari.adaugaEchipament(idPescar, undita);
+            break;
+        }
+        case 2:
+        {
+            int greutate;
+            float putereFrana;
+            int lungimeStruna;
+            int rezistentaStruna;
+            cout << "Introduceti greutatea mulinetei: ";
+            cin >> greutate;
+            cout << "Introduceti puterea franei: ";
+            cin >> putereFrana;
+            cout << "Introduceti lungimea strunei: ";
+            cin >> lungimeStruna;
+            cout << "Introduceti rezistenta strunei: ";
+            cin >> rezistentaStruna;
+            cout << endl;
+            Mulineta* mulineta = new Mulineta(idPescar, greutate, putereFrana, lungimeStruna, rezistentaStruna);
+            pescari.adaugaEchipament(idPescar, mulineta);
+            break;
+        }
+        case 3:
+        {
+            int marimeCarlig;
+            int greutatePluta;
+            int greutateMomitor;
+            string momeala;
+            cout << "Introduceti marimea carligului: ";
+            cin >> marimeCarlig;
+            cout << "Introduceti greutatea plutei: ";
+            cin >> greutatePluta;
+            cout << "Introduceti greutatea momitorului: ";
+            cin >> greutateMomitor;
+            cout << "Introduceti tipul momelii: ";
+            cin.ignore();
+            getline(cin, momeala);
+            cout << endl;
+            Accesorii* accesorii = new Accesorii(idPescar, marimeCarlig, greutatePluta, greutateMomitor, momeala);
+            pescari.adaugaEchipament(idPescar, accesorii);
+            break;
+        }
+        default:
+            cout << "Optiune invalida!\n";
+            break;
+    }
+    break;
+}
+break;
+case 3:
+{
+            while(true)
+            {
+                int choice2;
+            do
+            {
+                MeniuAfisare();
+                cin>>choice2;
+                switch (choice2)
+                {
+                    case 1:
+                        pescari.ArataListaPescari();
+                        break;
+                    case 2:
+                        cout<<"\nIntroduceti un ID: ";
+                        int K; cin>>K;
+                        pescari.afiseazaDatePescar(K);
+                        break;
+                    case 3:
+                        cout<<"Asteptati...\n";
+                        cout<<endl;
+                        break;
+                    default:
+                        cout << "Optiune invalida. Va rugam sa incercati din nou.\n";
+                        break;
+                }
+            } while (choice2 != 3);
+            break;
+            }
+}
+break;
+
+case 4:
+{
+            while(true)
+            {
+                int choice3;
+            do
+            {
+                MeniuModificare();
+                cin>>choice3;
+                switch (choice3)
+                {
+                    case 1:
+                        modificaDatePescar(pescari);
+                        break;
+                    case 2:
+                        modificaEchipamentPescar(pescari);
+                        break;
+                    case 3:
+                        cout<<"Asteptati...\n";
+                        break;
+                    default:
+                        cout << "Optiune invalida. Va rugam sa incercati din nou.\n";
+                        break;
+                }
+            } while (choice3 != 3);
+            break;
+            }
+}
+break;
+
+case 5:
+                cout << "Programul se inchide...\n";
+                return;
+            default:
+                cout << "Optiune invalida. Va rugam sa incercati din nou.\n";
+                break;
+        }
+    }
+}
+#endif // MENIU_H
+
+
+
+#ifndef PESCAR_H
+#define PESCAR_H
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include "echipament.h"
+
+using namespace std;
+
+class Pescar
+{
+private:
+    int id;
+    string nume;
+    string prenume;
+    int varsta;
+    vector<EchipamentPescuit*> echipament;
+
+public:
+    Pescar(int i, string n, string p, int v) : id(i), nume(n), prenume(p), varsta(v) {}
+
+    ~Pescar()
+    {
+        for (std::vector<EchipamentPescuit*>::iterator it = echipament.begin(); it != echipament.end(); ++it)
+        {
+            delete *it;
+        }
+    }
+
+    int getId() const { return id; }
+    string getNume() const { return nume; }
+    string getPrenume() const { return prenume; }
+    int getVarsta() const { return varsta; }
+
+    void setId(int x) { id = x; }
+    void setNume(const string& y) { nume = y; }
+    void setPrenume(const string& z) { prenume = z; }
+    void setVarsta(int w) { varsta = w; }
+
+    void adaugaEchipament(EchipamentPescuit* echipamentNou)
+    {
+        echipament.push_back(echipamentNou);
+    }
+
+void afiseazaEchipament() const {
+    for (std::vector<EchipamentPescuit*>::const_iterator it = echipament.begin(); it != echipament.end(); ++it) {
+        (*it)->afiseazaDetalii();
+    }
+}
+
+    void modificaUndita(float lungime, int putere)
+{
+    for (std::vector<EchipamentPescuit*>::iterator it = echipament.begin(); it != echipament.end(); ++it)
+    {
+        Undita* undita = dynamic_cast<Undita*>(*it);
+        if (undita != nullptr)
+        {
+            undita->modificaUndita(lungime, putere);
+            return;
+        }
+    }
+    cout << "Pescarul nu are o undita setata.\n";
+}
+
+    void modificaMulineta(int greutate, float putereFrana, int lungimeStruna, int rezistentaStruna)
+{
+    for (std::vector<EchipamentPescuit*>::iterator it = echipament.begin(); it != echipament.end(); ++it)
+    {
+        Mulineta* mulineta = dynamic_cast<Mulineta*>(*it);
+        if (mulineta != nullptr)
+        {
+            mulineta->modificaMulineta(greutate, putereFrana, lungimeStruna, rezistentaStruna);
+            return;
+        }
+    }
+    cout << "Pescarul nu are o mulineta setata.\n";
+}
+
+
+    void modificaAccesorii(int marimeCarlig, int greutatePluta, int greutateMomitor, const string& momeala)
+{
+    for (std::vector<EchipamentPescuit*>::iterator it = echipament.begin(); it != echipament.end(); ++it)
+    {
+        Accesorii* accesorii = dynamic_cast<Accesorii*>(*it);
+        if (accesorii != nullptr)
+        {
+            accesorii->modificaAccesorii(marimeCarlig, greutatePluta, greutateMomitor, momeala);
+            return;
+        }
+    }
+    cout << "Pescarul nu are accesorii setate.\n";
+}
+
+};
+#endif // PESCAR_H
+
+
+#ifndef VECTORPESCARI_H
+#define VECTORPESCARI_H
+
+#include <vector>
+#include <algorithm>
+#include "pescar.h"
+#include "echipament.h"
+
+using namespace std;
+
+class Vectorp
+{
+private:
+    vector<Pescar> pescari;
+
+public:
+    void adaugaPescar(Pescar& pescar)
+    {
+        pescari.push_back(pescar);
+    }
+
+    bool existaPescar(int id) const
+{
+    for (const Pescar& pescar : pescari)
+    {
+        if (pescar.getId() == id)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool idOcupat(int id)
+{
+    for (const Pescar& pescar : pescari)
+    {
+        if (pescar.getId() == id)
+        {
+            return true; // ID ocupat
+        }
+    }
+    return false; // ID disponibil
+}
+
+void afiseazaDatePescar(int m)
+{
+    for (const Pescar& pescar : pescari)
+    {
+        if (pescar.getId() == m)
+        {
+            cout << "ID: " << pescar.getId() << endl;
+            cout << "Nume: " << pescar.getNume() << endl;
+            cout << "Prenume: " << pescar.getPrenume() << endl;
+            cout << "Varsta: " << pescar.getVarsta() << endl;
+            cout << "Echipament:\n";
+            pescar.afiseazaEchipament();
+            cout << endl;
+            break;
+        }
+    }
+}
+
+void ArataListaPescari() const
+{
+    for (const Pescar& pescar : pescari)
+    {
+        cout << "Nume si prenume - ID: " << pescar.getNume() << " " << pescar.getPrenume() << " - " << pescar.getId() << endl;
+    }
+}
+
+void adaugaEchipament(int idPescar, EchipamentPescuit* echipament)
+{
+    for (Pescar& pescar : pescari)
+    {
+        if (pescar.getId() == idPescar)
+        {
+            pescar.adaugaEchipament(echipament);
+            return;
+        }
+    }
+    cout << "Pescarul cu ID-ul " << idPescar << " nu a fost gasit.\n";
+}
+
+
+    vector<Pescar>& getPescari()
+    {
+        return pescari;
+    }
+};
+#endif // VECTORPESCARI_H
+
+
+
+#ifndef ECHIPAMENT_H
+#define ECHIPAMENT_H
+using namespace std;
+#include <iostream>
+#include <string>
+
+class EchipamentPescuit
+{
+public:
+    virtual ~EchipamentPescuit() = default; // Destructor virtual
+    virtual void afiseazaDetalii() const = 0;
+};
+
+class Undita : public EchipamentPescuit
+{
+private:
+    int idPescar;
+    float lungime;
+    int putere;
+
+public:
+    Undita(int id, float lungime, int putere) : idPescar(id), lungime(lungime), putere(putere) {}
+    ~Undita() override = default;
+
+    void afiseazaDetalii() const override
+    {
+        cout << "Undita - ID Pescar: " << idPescar << ", Lungime: " << lungime << ", Putere: " << putere << "\n";
+    }
+
+    void modificaUndita(float lungimeNoua, int putereNoua)
+    {
+        lungime = lungimeNoua;
+        putere = putereNoua;
+    }
+};
+
+class Mulineta : public EchipamentPescuit
+{
+private:
+    int idPescar;
+    int greutate;
+    float putereFrana;
+    int lungimeStruna;
+    int rezistentaStruna;
+
+public:
+    Mulineta(int id, int greutate, float putereFrana, int lungimeStruna, int rezistentaStruna)
+        : idPescar(id), greutate(greutate), putereFrana(putereFrana), lungimeStruna(lungimeStruna), rezistentaStruna(rezistentaStruna) {}
+    ~Mulineta() override = default;
+
+    void afiseazaDetalii() const override
+    {
+        cout << "Mulineta - ID Pescar: " << idPescar << ", Greutate: " << greutate << ", Putere Frana: " << putereFrana << ", Lungime Struna: " << lungimeStruna << ", Rezistenta Struna: " << rezistentaStruna << "\n";
+    }
+
+    void modificaMulineta(int greutateNoua, float putereFranaNoua, int lungimeStrunaNoua, int rezistentaStrunaNoua)
+    {
+        greutate = greutateNoua;
+        putereFrana = putereFranaNoua;
+        lungimeStruna = lungimeStrunaNoua;
+        rezistentaStruna = rezistentaStrunaNoua;
+    }
+};
+
+class Accesorii : public EchipamentPescuit
+{
+private:
+    int idPescar;
+    int marimeCarlig;
+    int greutatePluta;
+    int greutateMomitor;
+    string momeala;
+
+public:
+    Accesorii(int id, int marimeCarlig, int greutatePluta, int greutateMomitor, const string& momeala)
+        : idPescar(id), marimeCarlig(marimeCarlig), greutatePluta(greutatePluta), greutateMomitor(greutateMomitor), momeala(momeala) {}
+    ~Accesorii() override = default;
+
+    void afiseazaDetalii() const override
+    {
+        cout << "Accesorii - ID Pescar: " << idPescar << ", Marime Carlig: " << marimeCarlig << ", Greutate Pluta: " << greutatePluta << ", Greutate Momitor: " << greutateMomitor << ", Momeala: " << momeala << "\n";
+    }
+
+    void modificaAccesorii(int marimeCarligNoua, int greutatePlutaNoua, int greutateMomitorNoua, const string& momealaNoua)
+    {
+        marimeCarlig = marimeCarligNoua;
+        greutatePluta = greutatePlutaNoua;
+        greutateMomitor = greutateMomitorNoua;
+        momeala = momealaNoua;
+    }
+};
+
+#endif // ECHIPAMENT_H
+
+
+#ifndef MODIFICA_H
+#define MODIFICA_H
+#include "pescar.h"
+#include "vectorpescari.h"
+#include "echipament.h"
+#include "meniu.h"
+using namespace std;
+
+void MeniuModificareDate() {
+    cout << "\nMeniu modificare date pescar:\n" << "1 - Modificare ID   " << "2 - Modificare Nume   " << "3 - Modificare Prenume   " << "4 - Modificare Varsta   " << "5 - Inapoi la meniul de   ";
+    cout << "Alegeti o optiune: ";
+}
+
+void modificaDatePescar(Vectorp& pescari)
+{
+    int idPescar;
+    cout << "Introduceti ID-ul pescarului pentru modificare: ";
+    cin >> idPescar;
+
+    Pescar* pescar = nullptr;
+    vector<Pescar>& listaPescari = pescari.getPescari();
+
+    for (size_t i = 0; i < listaPescari.size(); ++i)
+    {
+        if (listaPescari[i].getId() == idPescar)
+        {
+            pescar = &listaPescari[i];
+            break;
+        }
+    }
+
+    if (pescar == nullptr)
+    {
+        cout << "Pescarul cu ID-ul " << idPescar << " nu a fost gasit.\n";
+        return;
+    }
+
+    int choice;
+    while (true)
+    {
+        MeniuModificareDate();
+        cin >> choice;
+
+        switch (choice)
+        {
+case 1:
+{
+                int newId;
+                cout << "Introduceti noul ID: ";
+                cin >> newId;
+                pescar->setId(newId);
+                cout << "ID-ul pescarului a fost modificat cu succes.\n";
+                break;
+}
+case 2:
+{
+                string newName;
+                cout << "Introduceti noul nume: ";
+                cin >> newName;
+                pescar->setNume(newName);
+                cout << "Numele pescarului a fost modificat cu succes.\n";
+                break;
+}
+case 3:
+{
+                string newPrenume;
+                cout << "Introduceti noul prenume: ";
+                cin >> newPrenume;
+                pescar->setPrenume(newPrenume);
+                cout << "Prenumele pescarului a fost modificat cu succes.\n";
+                break;
+}
+case 4:
+{
+                int newVarsta;
+                cout << "Introduceti noua varsta: ";
+                cin >> newVarsta;
+                pescar->setVarsta(newVarsta);
+                cout << "Varsta pescarului a fost modificata cu succes.\n";
+                break;
+}
+case 5:
+{
+                cout << "Revenire la meniul principal.\n";
+                return;
+}
+            default:
+                cout << "Optiune invalida. Va rugam sa incercati din nou.\n";
+                break;
+        }
+    }
+}
+
+
+#endif // MODIFICA_H
+
+
+
+#ifndef MODIFICA2_H
+#define MODIFICA2_H
+#include "pescar.h"
+#include "vectorpescari.h"
+#include "echipament.h"
+#include "meniu.h"
+using namespace std;
+
+void MeniuModificareEchipament()
+{
+    cout << "\nMeniu modificare echipament pescar:\n" << "1 - Modifica Undita   " << "2 - Modifica Mulineta   " << "3 - Modifica Accesorii   " << "4 - Înapoi la meniul principal   ";
+    cout << "Alegeti o optiune: ";
+}
+
+void modificaEchipamentPescar(Vectorp& pescari)
+{
+    int idPescar;
+    cout << "Introduceti ID-ul pescarului pentru modificare echipament: ";
+    cin >> idPescar;
+
+    Pescar* pescar = nullptr;
+vector<Pescar>& listaPescari = pescari.getPescari();
+for (vector<Pescar>::iterator it = listaPescari.begin(); it != listaPescari.end(); ++it)
+{
+    if (it->getId() == idPescar)
+    {
+        pescar = &(*it);
+        break;
+    }
+}
+
+
+
+    if (pescar == nullptr) {
+        cout << "Pescarul cu ID-ul " << idPescar << " nu a fost gasit.\n";
+        return;
+    }
+
+    int choice;
+    while (true)
+    {
+        MeniuModificareEchipament();
+        cin >> choice;
+        switch (choice)
+        {
+case 1:
+{
+                float lungime;
+                int putere;
+                cout << "Introduceti noua lungime a unditei: ";
+                cin >> lungime;
+                cout << "Introduceti noua forta a unditei: ";
+                cin >> putere;
+                // Apelam metoda pentru modificarea unditei
+                pescar->modificaUndita(lungime, putere);
+                cout << "Undita a fost modificata cu succes.\n";
+                break;
+}
+case 2:
+{
+                int greutate;
+                float putereFrana;
+                int lungimeStruna;
+                int rezistentaStruna;
+                cout << "Introduceti noua greutate a mulinetei: ";
+                cin >> greutate;
+                cout << "Introduceti noua putere a franei: ";
+                cin >> putereFrana;
+                cout << "Introduceti noua lungime a strunei: ";
+                cin >> lungimeStruna;
+                cout << "Introduceti noua rezistenta a strunei: ";
+                cin >> rezistentaStruna;
+                // Apelam metoda pentru modificarea mulinetei
+                pescar->modificaMulineta(greutate, putereFrana, lungimeStruna, rezistentaStruna);
+                cout << "Mulineta a fost modificata cu succes.\n";
+                break;
+}
+case 3:
+{
+                int marimeCarlig;
+                int greutatePluta;
+                int greutateMomitor;
+                string momeala;
+                cout << "Introduceti noua marime a carligului: ";
+                cin >> marimeCarlig;
+                cout << "Introduceti noua greutate a plutei: ";
+                cin >> greutatePluta;
+                cout << "Introduceti noua greutate a momitorului: ";
+                cin >> greutateMomitor;
+                cout << "Introduceti noua momeala: ";
+                cin >> momeala;
+                // Apelam metoda pentru modificarea accesoriilor
+                pescar->modificaAccesorii(marimeCarlig, greutatePluta, greutateMomitor, momeala);
+                cout << "Accesoriile au fost modificate cu succes.\n";
+                break;
+}
+case 4:
+{
+                cout << "Revenire la meniul principal.\n";
+                return;
+}
+            default:
+                cout << "Optiune invalida. Va rugam sa incercati din nou.\n";
+                break;
+        }
+    }
+}
+#endif // MODIFICA2_H
+
